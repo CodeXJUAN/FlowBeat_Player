@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Courier New", monospace;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #00ff41;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Custom scrollbar for retro feel */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0e27;
+  border: 1px solid #00ff41;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #00ff41;
+  border: 1px solid #0a0e27;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00cc33;
+}

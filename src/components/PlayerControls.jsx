@@ -1,120 +1,229 @@
-import React from 'react';
+"use client"
 
-export default function PlayerControls({ 
-  isPlaying, 
-  onPlayPause, 
-  onPrevious, 
-  onNext, 
-  onSeek, 
-  currentTime, 
+export default function PlayerControls({
+  isPlaying,
+  onPlayPause,
+  onPrevious,
+  onNext,
+  onSeek,
+  currentTime,
   duration,
   loop,
   onToggleLoop,
   shuffle,
-  onToggleShuffle
+  onToggleShuffle,
 }) {
-
   const formatTime = (time) => {
-    if (isNaN(time)) return '00:00';
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
-
+    if (isNaN(time)) return "00:00"
+    const minutes = Math.floor(time / 60)
+    const seconds = Math.floor(time % 60)
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+  }
 
   const handleProgressChange = (e) => {
-    onSeek(parseFloat(e.target.value));
-  };
+    onSeek(Number.parseFloat(e.target.value))
+  }
 
   return (
-    <div className="player-controls" style={{ 
-      padding: '15px', 
-      borderRadius: '8px', 
-      backgroundColor: '#f5f5f5',
-      marginTop: '20px',
-      marginBottom: '20px'
-    }}>
-
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-        <span style={{ marginRight: '10px' }}>{formatTime(currentTime)}</span>
-        <input
-          type="range"
-          min="0"
-          max={duration || 0}
-          value={currentTime || 0}
-          onChange={handleProgressChange}
-          style={{ flex: 1 }}
-        />
-        <span style={{ marginLeft: '10px' }}>{formatTime(duration)}</span>
+    <div
+      style={{
+        padding: "20px",
+        background: "rgba(0, 0, 0, 0.3)",
+      }}
+    >
+      {/* Progress Bar */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginBottom: "20px",
+          gap: "10px",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "12px",
+            color: "#00ff41",
+            fontWeight: "bold",
+            minWidth: "45px",
+            textShadow: "0 0 5px #00ff41",
+          }}
+        >
+          {formatTime(currentTime)}
+        </span>
+        <div style={{ flex: 1, position: "relative" }}>
+          <input
+            type="range"
+            min="0"
+            max={duration || 0}
+            value={currentTime || 0}
+            onChange={handleProgressChange}
+            style={{
+              width: "100%",
+              height: "8px",
+              background: `linear-gradient(to right, #00ff41 0%, #00ff41 ${(currentTime / duration) * 100}%, #0a0e27 ${(currentTime / duration) * 100}%, #0a0e27 100%)`,
+              border: "2px solid #00ff41",
+              borderRadius: "4px",
+              outline: "none",
+              cursor: "pointer",
+              WebkitAppearance: "none",
+              appearance: "none",
+            }}
+          />
+        </div>
+        <span
+          style={{
+            fontSize: "12px",
+            color: "#00ff41",
+            fontWeight: "bold",
+            minWidth: "45px",
+            textShadow: "0 0 5px #00ff41",
+          }}
+        >
+          {formatTime(duration)}
+        </span>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
-        <button 
+      {/* Control Buttons */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "12px",
+        }}
+      >
+        <button
           onClick={onToggleShuffle}
-          style={{ 
-            backgroundColor: shuffle ? '#4CAF50' : '#e0e0e0',
-            border: 'none',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            cursor: 'pointer'
+          style={{
+            background: shuffle
+              ? "linear-gradient(180deg, #ffff00 0%, #cccc00 100%)"
+              : "linear-gradient(180deg, #333366 0%, #1a1a2e 100%)",
+            color: shuffle ? "#000" : "#00ff41",
+            border: `2px solid ${shuffle ? "#ffff00" : "#00ff41"}`,
+            borderRadius: "4px",
+            width: "45px",
+            height: "45px",
+            cursor: "pointer",
+            fontSize: "18px",
+            fontWeight: "bold",
+            boxShadow: shuffle ? "0 0 15px rgba(255, 255, 0, 0.6)" : "0 0 10px rgba(0, 255, 65, 0.3)",
+            transition: "all 0.2s",
           }}
+          title="Shuffle"
         >
           ⤨
         </button>
-        <button 
+
+        <button
           onClick={onPrevious}
-          style={{ 
-            backgroundColor: '#e0e0e0',
-            border: 'none',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            cursor: 'pointer'
+          style={{
+            background: "linear-gradient(180deg, #00ffff 0%, #0099cc 100%)",
+            color: "#000",
+            border: "2px solid #00ffff",
+            borderRadius: "4px",
+            width: "50px",
+            height: "50px",
+            cursor: "pointer",
+            fontSize: "20px",
+            fontWeight: "bold",
+            boxShadow: "0 0 15px rgba(0, 255, 255, 0.5)",
+            transition: "all 0.2s",
           }}
         >
           ⏮
         </button>
-        <button 
+
+        <button
           onClick={onPlayPause}
-          style={{ 
-            backgroundColor: '#2196F3',
-            border: 'none',
-            borderRadius: '50%',
-            width: '50px',
-            height: '50px',
-            cursor: 'pointer'
+          style={{
+            background: isPlaying
+              ? "linear-gradient(180deg, #ff00ff 0%, #cc0099 100%)"
+              : "linear-gradient(180deg, #00ff41 0%, #00cc33 100%)",
+            color: "#000",
+            border: `3px solid ${isPlaying ? "#ff00ff" : "#00ff41"}`,
+            borderRadius: "50%",
+            width: "70px",
+            height: "70px",
+            cursor: "pointer",
+            fontSize: "28px",
+            fontWeight: "bold",
+            boxShadow: isPlaying ? "0 0 25px rgba(255, 0, 255, 0.8)" : "0 0 25px rgba(0, 255, 65, 0.8)",
+            transition: "all 0.2s",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          {isPlaying ? '⏸' : '▶'}
+          {isPlaying ? "⏸" : "▶"}
         </button>
-        <button 
+
+        <button
           onClick={onNext}
-          style={{ 
-            backgroundColor: '#e0e0e0',
-            border: 'none',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            cursor: 'pointer'
+          style={{
+            background: "linear-gradient(180deg, #00ffff 0%, #0099cc 100%)",
+            color: "#000",
+            border: "2px solid #00ffff",
+            borderRadius: "4px",
+            width: "50px",
+            height: "50px",
+            cursor: "pointer",
+            fontSize: "20px",
+            fontWeight: "bold",
+            boxShadow: "0 0 15px rgba(0, 255, 255, 0.5)",
+            transition: "all 0.2s",
           }}
         >
           ⏭
         </button>
-        <button 
+
+        <button
           onClick={onToggleLoop}
-          style={{ 
-            backgroundColor: loop ? '#4CAF50' : '#e0e0e0',
-            border: 'none',
-            borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            cursor: 'pointer'
+          style={{
+            background: loop
+              ? "linear-gradient(180deg, #ffff00 0%, #cccc00 100%)"
+              : "linear-gradient(180deg, #333366 0%, #1a1a2e 100%)",
+            color: loop ? "#000" : "#00ff41",
+            border: `2px solid ${loop ? "#ffff00" : "#00ff41"}`,
+            borderRadius: "4px",
+            width: "45px",
+            height: "45px",
+            cursor: "pointer",
+            fontSize: "18px",
+            fontWeight: "bold",
+            boxShadow: loop ? "0 0 15px rgba(255, 255, 0, 0.6)" : "0 0 10px rgba(0, 255, 65, 0.3)",
+            transition: "all 0.2s",
           }}
+          title="Loop"
         >
           ⟲
         </button>
       </div>
+
+      {/* Custom range input styling */}
+      <style>{`
+        input[type="range"]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 16px;
+          height: 16px;
+          background: #00ff41;
+          border: 2px solid #000;
+          border-radius: 50%;
+          cursor: pointer;
+          box-shadow: 0 0 10px #00ff41;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+          width: 16px;
+          height: 16px;
+          background: #00ff41;
+          border: 2px solid #000;
+          border-radius: 50%;
+          cursor: pointer;
+          box-shadow: 0 0 10px #00ff41;
+        }
+      `}</style>
     </div>
-  );
+  )
 }
