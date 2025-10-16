@@ -30,5 +30,18 @@
     "dev:electron:win": "concurrently \"bun run dev\" \"wait-on http://localhost:5173 && electron .\"",
     "package": "bun run build && electron-builder --dir",
     "dist": "bun run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.flowbeat.player",
+    "productName": "FlowBeat",
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "release"
+    }
   }
 }
