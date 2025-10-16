@@ -8,6 +8,7 @@
     "@types/bun": "latest",
     "@vitejs/plugin-react": "^5.0.4",
     "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
     "electron": "^38.3.0",
     "electron-builder": "^26.0.12",
     "vite": "^7.1.10",
@@ -24,9 +25,10 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --port 5173",
-    "start": "electron .",
-    "dev:electron": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
-    "package": "electron-builder --dir",
-    "dist": "electron-builder"
+    "start": "cross-env NODE_ENV=development electron .",
+    "dev:electron": "concurrently \"bun run dev\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "dev:electron:win": "concurrently \"bun run dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "package": "bun run build && electron-builder --dir",
+    "dist": "bun run build && electron-builder"
   }
 }

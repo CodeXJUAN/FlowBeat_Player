@@ -1,6 +1,16 @@
-const { contextBridge, ipcRenderer } = require('electron');
+import { contextBridge, ipcRenderer } from 'electron';
+
+console.log('Preload script cargado');
 
 contextBridge.exposeInMainWorld('electronAPI', {
-    openFiles: () => ipcRenderer.invoke('dialog:openFiles'),
-    openFolder: () => ipcRenderer.invoke('dialog:openFolder')
+    openFiles: () => {
+        console.log('Llamando a openFiles');
+        return ipcRenderer.invoke('dialog:openFiles');
+    },
+    openFolder: () => {
+        console.log('Llamando a openFolder');
+        return ipcRenderer.invoke('dialog:openFolder');
+    }
 });
+
+console.log('electronAPI expuesto correctamente');

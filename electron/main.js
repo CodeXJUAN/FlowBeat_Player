@@ -13,30 +13,50 @@ function createWindow() {
         width: 1000,
         height: 700,
         webPreferences: {
-        preload: path.join(__dirname, 'preload.js'),
-        contextIsolation: true,
-        nodeIntegration: false
+            preload: path.join(__dirname, 'preload.js'),
+            contextIsolation: true,
+            nodeIntegration: false
         }
     });
 
+    const distPath = path.join(__dirname, '../dist/index.html');
+    const isDev = !fs.existsSync(distPath) || process.env.NODE_ENV === 'development';
     const devUrl = 'http://localhost:5173';
 
-    if (process.env.NODE_ENV === 'development') {
-        mainWindow.loadURL(devUrl);
+    if (isDev) {
+        console.log('Cargando en modo desarrollo desde:', devUrl);
+        mainWindow.loadURL(devUrl).catch(err => {
+            console.error('Error al cargar la URL de desarrollo:', err);
+        });
         mainWindow.webContents.openDevTools();
     } else {
-        mainWindow.loadFile(path.join(__dirname, '../dist/index.html'));
+        console.log('Cargando build desde:', distPath);
+        mainWindow.loadFile(distPath);
     }
+
+    // Log útil para debugging
+    mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+        console.error('Falló la carga:', errorCode, errorDescription);
+    });
 }
 
-await app.whenReady();
-createWindow();
+app.whenReady().then(() => {
+    createWindow();
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow();
+        }
+    });
 });
 
-// IPC handlers para abrir diálogo (más adelante los llamaremos desde React)
+app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+
+// IPC handlers
 ipcMain.handle('dialog:openFiles', async () => {
     const res = await dialog.showOpenDialog(mainWindow, {
         properties: ['openFile', 'multiSelections'],
@@ -50,10 +70,17 @@ ipcMain.handle('dialog:openFolder', async () => {
         properties: ['openDirectory']
     });
     if (res.canceled || !res.filePaths.length) return [];
+    
     const folder = res.filePaths[0];
     const allowed = new Set(['.mp3', '.wav', '.ogg', '.m4a']);
-    const files = fs.readdirSync(folder)
-        .filter(f => allowed.has(path.extname(f).toLowerCase()))
-        .map(f => path.join(folder, f));
-    return files;
+    
+    try {
+        const files = fs.readdirSync(folder)
+            .filter(f => allowed.has(path.extname(f).toLowerCase()))
+            .map(f => path.join(folder, f));
+        return files;
+    } catch (err) {
+        console.error('Error leyendo carpeta:', err);
+        return [];
+    }
 });
