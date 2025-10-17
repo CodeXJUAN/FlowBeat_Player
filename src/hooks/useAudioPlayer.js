@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 
 export default function useAudioPlayer(initialPlaylist = []) {
   const [playlist, setPlaylist] = useState(initialPlaylist)
@@ -12,51 +12,98 @@ export default function useAudioPlayer(initialPlaylist = []) {
   const [shuffle, setShuffle] = useState(false)
 
   const audioRef = useRef(null)
+  const isLoadingRef = useRef(false)
 
+  // Initialize audio element once
   useEffect(() => {
-    audioRef.current = new Audio()
+    if (!audioRef.current) {
+      audioRef.current = new Audio()
+      audioRef.current.preload = "metadata"
+    }
+
+    const audio = audioRef.current
 
     const handleLoadedMetadata = () => {
-      setDuration(audioRef.current.duration)
+      console.log("Metadata loaded, duration:", audio.duration)
+      setDuration(audio.duration || 0)
+      isLoadingRef.current = false
     }
 
     const handleTimeUpdate = () => {
-      setCurrentTime(audioRef.current.currentTime)
+      setCurrentTime(audio.currentTime || 0)
     }
 
     const handleEnded = () => {
+      console.log("Track ended")
       if (loop) {
-        audioRef.current.currentTime = 0
-        audioRef.current.play()
+        audio.currentTime = 0
+        audio.play().catch(err => console.error("Error looping:", err))
       } else {
-        handleNext()
+        handleNextTrack()
       }
     }
 
-    audioRef.current.addEventListener("loadedmetadata", handleLoadedMetadata)
-    audioRef.current.addEventListener("timeupdate", handleTimeUpdate)
-    audioRef.current.addEventListener("ended", handleEnded)
+    const handleCanPlay = () => {
+      console.log("Can play audio")
+      isLoadingRef.current = false
+    }
+
+    const handleError = (e) => {
+      console.error("Audio error:", e, audio.error)
+      setIsPlaying(false)
+      isLoadingRef.current = false
+    }
+
+    const handleLoadStart = () => {
+      console.log("Load started")
+      isLoadingRef.current = true
+    }
+
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata)
+    audio.addEventListener("timeupdate", handleTimeUpdate)
+    audio.addEventListener("ended", handleEnded)
+    audio.addEventListener("canplay", handleCanPlay)
+    audio.addEventListener("error", handleError)
+    audio.addEventListener("loadstart", handleLoadStart)
 
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current.removeEventListener("loadedmetadata", handleLoadedMetadata)
-        audioRef.current.removeEventListener("timeupdate", handleTimeUpdate)
-        audioRef.current.removeEventListener("ended", handleEnded)
-      }
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata)
+      audio.removeEventListener("timeupdate", handleTimeUpdate)
+      audio.removeEventListener("ended", handleEnded)
+      audio.removeEventListener("canplay", handleCanPlay)
+      audio.removeEventListener("error", handleError)
+      audio.removeEventListener("loadstart", handleLoadStart)
+      audio.pause()
     }
-  }, [loop])
+  }, [])
+
+  // Handle next track separately to avoid circular dependency
+  const handleNextTrack = useCallback(() => {
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = shuffle
+        ? Math.floor(Math.random() * playlist.length)
+        : prevIndex >= playlist.length - 1
+        ? 0
+        : prevIndex + 1
+      return nextIndex
+    })
+  }, [playlist.length, shuffle])
 
   useEffect(() => {
-    if (playlist.length === 0 || currentIndex >= playlist.length) return
+    if (playlist.length === 0 || currentIndex >= playlist.length) {
+      console.log("No valid track to load")
+      return
+    }
 
     const loadTrack = async () => {
       if (audioRef.current) {
         const wasPlaying = isPlaying
         audioRef.current.pause()
-        audioRef.current.src = playlist[currentIndex]
+        audioRef.current.src = playlist[currentIndex].startsWith('file://')
+          ? playlist[currentIndex]
+          : `file://${playlist[currentIndex]}`
         audioRef.current.load()
-
+    
         try {
           if (wasPlaying) {
             await audioRef.current.play()
@@ -72,24 +119,45 @@ export default function useAudioPlayer(initialPlaylist = []) {
   }, [currentIndex, playlist])
 
   const togglePlay = async () => {
-    if (playlist.length === 0) return
+    if (playlist.length === 0) {
+      console.log("No tracks in playlist")
+      return
+    }
 
-    if (isPlaying) {
-      audioRef.current.pause()
-      setIsPlaying(false)
-    } else {
-      try {
-        await audioRef.current.play()
-        setIsPlaying(true)
-      } catch (err) {
-        console.error("[v0] Error playing:", err)
+    if (!audioRef.current) {
+      console.error("Audio ref not initialized")
+      return
+    }
+
+    const audio = audioRef.current
+
+    try {
+      if (isPlaying) {
+        audio.pause()
         setIsPlaying(false)
+        console.log("Paused")
+      } else {
+        if (!audio.src || audio.src === "") {
+          const trackPath = playlist[currentIndex];
+          const encodedPath = encodeURI(trackPath).replace(/\\/g, '/');
+          const audioSrc = `local-audio://${encodedPath}`;
+          audio.src = audioSrc;
+          audio.load()
+          await new Promise(resolve => setTimeout(resolve, 100))
+        }
+
+        await audio.play()
+        setIsPlaying(true)
+        console.log("Playing")
       }
+    } catch (err) {
+      console.error("Toggle play error:", err)
+      setIsPlaying(false)
     }
   }
 
   const handlePrevious = () => {
-    if (playlist.length <= 1) return
+    if (playlist.length === 0) return
 
     if (shuffle) {
       const randomIndex = Math.floor(Math.random() * playlist.length)
@@ -100,7 +168,7 @@ export default function useAudioPlayer(initialPlaylist = []) {
   }
 
   const handleNext = () => {
-    if (playlist.length <= 1) return
+    if (playlist.length === 0) return
 
     if (shuffle) {
       const randomIndex = Math.floor(Math.random() * playlist.length)
@@ -113,29 +181,34 @@ export default function useAudioPlayer(initialPlaylist = []) {
   const playTrack = (index) => {
     if (index >= 0 && index < playlist.length) {
       setCurrentIndex(index)
-      setIsPlaying(true)
+      setTimeout(() => setIsPlaying(true), 100)
     }
   }
 
   const seek = (time) => {
-    if (audioRef.current) {
+    if (audioRef.current && !Number.isNaN(time)) {
       audioRef.current.currentTime = time
       setCurrentTime(time)
     }
   }
 
   const addToPlaylist = (tracks) => {
-    setPlaylist((prev) => [...prev, ...tracks])
+    if (tracks && tracks.length > 0) {
+      console.log("Adding tracks:", tracks)
+      setPlaylist((prev) => [...prev, ...tracks])
+    }
   }
 
   const clearPlaylist = () => {
-    setPlaylist([])
-    setCurrentIndex(0)
-    setIsPlaying(false)
     if (audioRef.current) {
       audioRef.current.pause()
       audioRef.current.src = ""
     }
+    setPlaylist([])
+    setCurrentIndex(0)
+    setIsPlaying(false)
+    setDuration(0)
+    setCurrentTime(0)
   }
 
   const toggleLoop = () => {

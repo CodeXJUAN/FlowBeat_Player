@@ -20,21 +20,3 @@ body {
   align-items: center;
   justify-content: center;
 }
-
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0a0e27;
-  border: 1px solid #00ff41;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #00ff41;
-  border: 1px solid #0a0e27;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #00cc33;
-}

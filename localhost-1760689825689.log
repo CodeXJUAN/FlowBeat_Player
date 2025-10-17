@@ -1,0 +1,18 @@
+VM6:4 Preload script cargado
+VM6:17 electronAPI expuesto correctamente
+react-dom_client.js?v=b4a0ba81:17985 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+useAudioPlayer.js:105 Loading track: C:\Users\juanm\Music\_FOCUS_\4X4.mp3
+useAudioPlayer.js:58 Load started
+useAudioPlayer.js:52 Audio error: EventisTrusted: truebubbles: falsecancelBubble: falsecancelable: truecomposed: falsecurrentTarget: nulldefaultPrevented: falseeventPhase: 0returnValue: truesrcElement: nulltarget: nulltimeStamp: 430.7999999821186type: "error"[[Prototype]]: Event MediaErrorcode: 4message: "MEDIA_ELEMENT_ERROR: Media load rejected by URL safety check"[[Prototype]]: MediaError
+handleError @ useAudioPlayer.js:52
+useAudioPlayer.js:173 Toggle play error: NotSupportedError: The element has no supported sources.
+togglePlay @ useAudioPlayer.js:173
+await in togglePlay
+executeDispatch @ react-dom_client.js?v=b4a0ba81:11734
+runWithFiberInDEV @ react-dom_client.js?v=b4a0ba81:1483
+processDispatchQueue @ react-dom_client.js?v=b4a0ba81:11770
+(anonymous) @ react-dom_client.js?v=b4a0ba81:12180
+batchedUpdates$1 @ react-dom_client.js?v=b4a0ba81:2626
+dispatchEventForPluginEventSystem @ react-dom_client.js?v=b4a0ba81:11875
+dispatchEvent @ react-dom_client.js?v=b4a0ba81:14790
+dispatchDiscreteEvent @ react-dom_client.js?v=b4a0ba81:14771

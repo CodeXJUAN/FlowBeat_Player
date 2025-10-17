@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog, protocol } from 'electron';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -41,6 +41,33 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+    protocol.registerFileProtocol('local-audio', (request, callback) => {
+        const url = request.url.replace(/^local-audio:\/\//, '');
+        try {
+            const decodedPath = decodeURI(url);
+            const normalizedPath = path.normalize(decodedPath);
+            const ext = path.extname(normalizedPath).toLowerCase();
+            
+            // Mapeo de extensiones a MIME types
+            const mimeTypes = {
+                '.mp3': 'audio/mpeg',
+                '.wav': 'audio/wav',
+                '.ogg': 'audio/ogg',
+                '.m4a': 'audio/mp4'
+            };
+            
+            return callback({
+                path: normalizedPath,
+                headers: {
+                    'Content-Type': mimeTypes[ext] || 'application/octet-stream'
+                }
+            });
+        } catch (error) {
+            console.error('Error cargando archivo:', error);
+            return callback({ error: -6 });
+        }
+    });
+
     createWindow();
 
     app.on('activate', () => {

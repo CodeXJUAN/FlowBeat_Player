@@ -34,9 +34,9 @@ export default function PlaylistPanel({ playlist, currentIndex, onTrackSelect, i
           width: "400px",
           height: "100vh",
           background: "linear-gradient(180deg, #2a2a4a 0%, #1a1a2e 100%)",
-          border: "3px solid #00ff41",
+          border: "3px solid #7e7e7ec7",
           borderRight: "none",
-          boxShadow: "-5px 0 30px rgba(0, 255, 65, 0.5)",
+          boxShadow: "-5px 0 30px rgba(97, 97, 97, 0.5)",
           transform: isOpen ? "translateX(0)" : "translateX(100%)",
           transition: "transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
           zIndex: 1000,
@@ -47,9 +47,9 @@ export default function PlaylistPanel({ playlist, currentIndex, onTrackSelect, i
         {/* Header */}
         <div
           style={{
-            background: "linear-gradient(180deg, #00ff41 0%, #00cc33 100%)",
+            background: "linear-gradient(180deg, #7e7e7ec7 0%, #585858c7 100%)",
             padding: "15px 20px",
-            borderBottom: "3px solid #00ff41",
+            borderBottom: "3px solid #7e7e7ec7",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
@@ -70,7 +70,7 @@ export default function PlaylistPanel({ playlist, currentIndex, onTrackSelect, i
           <button
             onClick={onClose}
             style={{
-              background: "#ff00ff",
+              background: "#b7b7b7c7",
               color: "#000",
               border: "2px solid #000",
               borderRadius: "4px",
@@ -82,7 +82,7 @@ export default function PlaylistPanel({ playlist, currentIndex, onTrackSelect, i
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "0 0 10px rgba(255, 0, 255, 0.5)",
+              boxShadow: "0 0 10px rgba(183, 183, 183, 0.5)",
             }}
           >
             ×
@@ -94,11 +94,11 @@ export default function PlaylistPanel({ playlist, currentIndex, onTrackSelect, i
           style={{
             padding: "10px 20px",
             background: "rgba(0, 0, 0, 0.3)",
-            borderBottom: "2px solid #00ff41",
-            color: "#00ff41",
+            borderBottom: "2px solid #7e7e7ec7",
+            color: "#7e7e7ec7",
             fontSize: "12px",
             fontWeight: "bold",
-            textShadow: "0 0 5px #00ff41",
+            textShadow: "0 0 5px #7e7e7ec7",
           }}
         >
           {playlist.length} TRACK{playlist.length !== 1 ? "S" : ""} LOADED

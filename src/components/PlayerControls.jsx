@@ -14,7 +14,7 @@ export default function PlayerControls({
   onToggleShuffle,
 }) {
   const formatTime = (time) => {
-    if (isNaN(time)) return "00:00"
+    if (Number.isNaN(time)) return "00:00"
     const minutes = Math.floor(time / 60)
     const seconds = Math.floor(time % 60)
     return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
@@ -31,7 +31,6 @@ export default function PlayerControls({
         background: "rgba(0, 0, 0, 0.3)",
       }}
     >
-      {/* Progress Bar */}
       <div
         style={{
           display: "flex",
@@ -84,7 +83,6 @@ export default function PlayerControls({
         </span>
       </div>
 
-      {/* Control Buttons */}
       <div
         style={{
           display: "flex",
@@ -138,17 +136,17 @@ export default function PlayerControls({
           onClick={onPlayPause}
           style={{
             background: isPlaying
-              ? "linear-gradient(180deg, #ff00ff 0%, #cc0099 100%)"
+              ? "linear-gradient(180deg, #650000ff 0%, #5f0202ff 100%)"
               : "linear-gradient(180deg, #00ff41 0%, #00cc33 100%)",
             color: "#000",
-            border: `3px solid ${isPlaying ? "#ff00ff" : "#00ff41"}`,
+            border: `3px solid ${isPlaying ? "#650000ff" : "#00ff41"}`,
             borderRadius: "50%",
             width: "70px",
             height: "70px",
             cursor: "pointer",
             fontSize: "28px",
             fontWeight: "bold",
-            boxShadow: isPlaying ? "0 0 25px rgba(255, 0, 255, 0.8)" : "0 0 25px rgba(0, 255, 65, 0.8)",
+            boxShadow: isPlaying ? "0 0 25px rgba(101, 0, 0, 0.8)" : "0 0 25px rgba(0, 255, 65, 0.8)",
             transition: "all 0.2s",
             display: "flex",
             alignItems: "center",
@@ -200,7 +198,6 @@ export default function PlayerControls({
         </button>
       </div>
 
-      {/* Custom range input styling */}
       <style>{`
         input[type="range"]::-webkit-slider-thumb {
           -webkit-appearance: none;
