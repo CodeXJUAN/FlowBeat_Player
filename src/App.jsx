@@ -56,103 +56,97 @@ export default function App() {
   return (
     <div
       style={{
-        width: "100%",
-        height: "100vh",
+        width: "99vw",
+        height: "98vh",
         display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "relative",
+        flexDirection: "column",
+        background: "linear-gradient(180deg, #2a2a30 0%, #1a1a20 100%)",
       }}
     >
-      {/* Main Player Window */}
       <div
         style={{
-          width: "500px",
-          background: "linear-gradient(180deg, #2a2a4a 0%, #1a1a2e 100%)",
-          border: "3px solid #00ff41",
-          borderRadius: "12px",
-          boxShadow: "0 0 30px rgba(0, 255, 65, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.5)",
-          fontFamily: "'Courier New', monospace",
-          overflow: "hidden",
+          background: "linear-gradient(180deg, #4a4a52 0%, #3a3a42 100%)",
+          padding: "12px 20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderBottom: "1px solid #555",
+          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.3)",
         }}
       >
-        {/* Title Bar */}
         <div
           style={{
-            background: "linear-gradient(180deg, #00ff41 0%, #00cc33 100%)",
-            padding: "8px 15px",
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            borderBottom: "2px solid #00ff41",
+            gap: "12px",
           }}
         >
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
+              width: "24px",
+              height: "24px",
+              background: "#666",
+              border: "2px solid #888",
+              transform: "rotate(45deg)",
+            }}
+          />
+          <h1
+            style={{
+              fontSize: "20px",
+              fontWeight: "bold",
+              color: "#ccc",
+              letterSpacing: "2px",
             }}
           >
-            <div
-              style={{
-                width: "20px",
-                height: "20px",
-                background: "#ff00ff",
-                border: "2px solid #000",
-                transform: "rotate(45deg)",
-              }}
-            />
-            <h1
-              style={{
-                fontSize: "18px",
-                fontWeight: "bold",
-                color: "#000",
-                textShadow: "1px 1px 0px rgba(255,255,255,0.5)",
-                letterSpacing: "2px",
-              }}
-            >
-              FLOWBEAT v2.0
-            </h1>
-          </div>
-          <div style={{ display: "flex", gap: "5px" }}>
-            <div style={{ width: "12px", height: "12px", background: "#ff00ff", border: "1px solid #000" }} />
-            <div style={{ width: "12px", height: "12px", background: "#00ffff", border: "1px solid #000" }} />
-            <div style={{ width: "12px", height: "12px", background: "#ffff00", border: "1px solid #000" }} />
-          </div>
+            FLOWBEAT
+          </h1>
         </div>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <div style={{ width: "14px", height: "14px", background: "#888", border: "1px solid #666", borderRadius: "2px" }} />
+          <div style={{ width: "14px", height: "14px", background: "#777", border: "1px solid #666", borderRadius: "2px" }} />
+          <div style={{ width: "14px", height: "14px", background: "#666", border: "1px solid #555", borderRadius: "2px" }} />
+        </div>
+      </div>
 
-        {/* Display Screen */}
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          padding: "30px 40px",
+          gap: "30px",
+          overflow: "auto",
+        }}
+      >
         <div
           style={{
-            margin: "20px",
-            padding: "20px",
-            background: "#0a0e27",
-            border: "3px inset #00ff41",
-            borderRadius: "4px",
-            minHeight: "100px",
-            boxShadow: "inset 0 0 20px rgba(0, 255, 65, 0.3)",
+            padding: "30px",
+            background: "#1a1a22",
+            border: "2px solid #444",
+            borderRadius: "8px",
+            minHeight: "150px",
+            boxShadow: "inset 0 2px 10px rgba(0, 0, 0, 0.5)",
           }}
         >
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "15px",
-              marginBottom: "15px",
+              gap: "20px",
+              marginBottom: "20px",
             }}
           >
-            {/* Animated Equalizer */}
-            <div style={{ display: "flex", gap: "3px", alignItems: "flex-end", height: "30px" }}>
+            <div style={{ display: "flex", gap: "4px", alignItems: "flex-end", height: "40px" }}>
               {[...Array(5)].map((_, i) => (
                 <div
                   key={i}
                   style={{
-                    width: "4px",
-                    height: isPlaying ? `${20 + Math.random() * 10}px` : "5px",
-                    background: "#00ff41",
-                    transition: "height 0.1s",
-                    animation: isPlaying ? `pulse ${0.3 + i * 0.1}s infinite alternate` : "none",
+                    width: "6px",
+                    height: isPlaying ? `${25 + Math.random() * 15}px` : "8px",
+                    background: "#888",
+                    transition: "height 0.15s",
+                    animation: isPlaying ? `pulse ${0.4 + i * 0.1}s infinite alternate` : "none",
+                    borderRadius: "2px",
                   }}
                 />
               ))}
@@ -160,12 +154,12 @@ export default function App() {
             <div
               style={{
                 flex: 1,
-                fontSize: "14px",
-                color: "#00ff41",
-                textShadow: "0 0 10px #00ff41",
+                fontSize: "18px",
+                color: "#aaa",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
                 textOverflow: "ellipsis",
+                fontWeight: "500",
               }}
             >
               {getCurrentSongName()}
@@ -174,11 +168,10 @@ export default function App() {
 
           <div
             style={{
-              fontSize: "12px",
-              color: isPlaying ? "#ff00ff" : "#666",
-              textShadow: isPlaying ? "0 0 8px #ff00ff" : "none",
+              fontSize: "14px",
+              color: isPlaying ? "#999" : "#555",
               fontWeight: "bold",
-              letterSpacing: "1px",
+              letterSpacing: "1.5px",
             }}
           >
             {isPlaying ? "▶ PLAYING" : "■ STOPPED"}
@@ -199,32 +192,39 @@ export default function App() {
           onToggleShuffle={toggleShuffle}
         />
 
-        {/* Action Buttons */}
         <div
           style={{
             display: "flex",
-            gap: "8px",
-            padding: "15px 20px",
-            background: "rgba(0, 0, 0, 0.3)",
-            borderTop: "2px solid #00ff41",
+            gap: "12px",
+            padding: "0",
+            maxWidth: "800px",
+            margin: "0 auto",
+            width: "100%",
           }}
         >
           <button
             onClick={handleOpenFiles}
             style={{
               flex: 1,
-              padding: "10px",
-              background: "linear-gradient(180deg, #00ffff 0%, #0099cc 100%)",
-              color: "#000",
-              border: "2px solid #00ffff",
-              borderRadius: "4px",
+              padding: "14px",
+              background: "linear-gradient(180deg, #555 0%, #444 100%)",
+              color: "#ddd",
+              border: "2px solid #666",
+              borderRadius: "6px",
               cursor: "pointer",
               fontWeight: "bold",
-              fontSize: "11px",
+              fontSize: "12px",
               fontFamily: "'Courier New', monospace",
-              boxShadow: "0 2px 0 #006699, 0 0 10px rgba(0, 255, 255, 0.5)",
+              boxShadow: "0 3px 0 #333, 0 2px 8px rgba(0, 0, 0, 0.3)",
               textTransform: "uppercase",
-              letterSpacing: "1px",
+              letterSpacing: "1.5px",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "linear-gradient(180deg, #666 0%, #555 100%)"
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "linear-gradient(180deg, #555 0%, #444 100%)"
             }}
           >
             + FILES
@@ -233,18 +233,25 @@ export default function App() {
             onClick={handleOpenFolder}
             style={{
               flex: 1,
-              padding: "10px",
-              background: "linear-gradient(180deg, #00ffff 0%, #0099cc 100%)",
-              color: "#000",
-              border: "2px solid #00ffff",
-              borderRadius: "4px",
+              padding: "14px",
+              background: "linear-gradient(180deg, #555 0%, #444 100%)",
+              color: "#ddd",
+              border: "2px solid #666",
+              borderRadius: "6px",
               cursor: "pointer",
               fontWeight: "bold",
-              fontSize: "11px",
+              fontSize: "12px",
               fontFamily: "'Courier New', monospace",
-              boxShadow: "0 2px 0 #006699, 0 0 10px rgba(0, 255, 255, 0.5)",
+              boxShadow: "0 3px 0 #333, 0 2px 8px rgba(0, 0, 0, 0.3)",
               textTransform: "uppercase",
-              letterSpacing: "1px",
+              letterSpacing: "1.5px",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "linear-gradient(180deg, #666 0%, #555 100%)"
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "linear-gradient(180deg, #555 0%, #444 100%)"
             }}
           >
             + FOLDER
@@ -253,18 +260,25 @@ export default function App() {
             onClick={clearPlaylist}
             style={{
               flex: 1,
-              padding: "10px",
-              background: "linear-gradient(180deg, #ff00ff 0%, #cc0099 100%)",
-              color: "#000",
-              border: "2px solid #ff00ff",
-              borderRadius: "4px",
+              padding: "14px",
+              background: "linear-gradient(180deg, #644 0%, #533 100%)",
+              color: "#ddd",
+              border: "2px solid #755",
+              borderRadius: "6px",
               cursor: "pointer",
               fontWeight: "bold",
-              fontSize: "11px",
+              fontSize: "12px",
               fontFamily: "'Courier New', monospace",
-              boxShadow: "0 2px 0 #990066, 0 0 10px rgba(255, 0, 255, 0.5)",
+              boxShadow: "0 3px 0 #422, 0 2px 8px rgba(0, 0, 0, 0.3)",
               textTransform: "uppercase",
-              letterSpacing: "1px",
+              letterSpacing: "1.5px",
+              transition: "all 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "linear-gradient(180deg, #755 0%, #644 100%)"
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "linear-gradient(180deg, #644 0%, #533 100%)"
             }}
           >
             CLEAR
@@ -272,30 +286,30 @@ export default function App() {
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             style={{
-              padding: "10px 15px",
+              padding: "14px 20px",
               background: isSidebarOpen
-                ? "linear-gradient(180deg, #ffff00 0%, #cccc00 100%)"
-                : "linear-gradient(180deg, #00ff41 0%, #00cc33 100%)",
-              color: "#000",
-              border: `2px solid ${isSidebarOpen ? "#ffff00" : "#00ff41"}`,
-              borderRadius: "4px",
+                ? "linear-gradient(180deg, #777 0%, #666 100%)"
+                : "linear-gradient(180deg, #555 0%, #444 100%)",
+              color: "#ddd",
+              border: `2px solid ${isSidebarOpen ? "#888" : "#666"}`,
+              borderRadius: "6px",
               cursor: "pointer",
               fontWeight: "bold",
-              fontSize: "11px",
+              fontSize: "12px",
               fontFamily: "'Courier New', monospace",
               boxShadow: isSidebarOpen
-                ? "0 2px 0 #999900, 0 0 10px rgba(255, 255, 0, 0.5)"
-                : "0 2px 0 #009922, 0 0 10px rgba(0, 255, 65, 0.5)",
+                ? "0 3px 0 #555, 0 2px 8px rgba(0, 0, 0, 0.3)"
+                : "0 3px 0 #333, 0 2px 8px rgba(0, 0, 0, 0.3)",
               textTransform: "uppercase",
-              letterSpacing: "1px",
+              letterSpacing: "1.5px",
+              transition: "all 0.2s",
             }}
           >
-            QUEUE
+            QUEUE {playlist.length > 0 && `(${playlist.length})`}
           </button>
         </div>
       </div>
 
-      {/* Sliding Sidebar Playlist */}
       <PlaylistPanel
         playlist={playlist}
         currentIndex={currentIndex}
@@ -304,13 +318,12 @@ export default function App() {
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      {/* CSS Animation */}
       <style>{`
-                @keyframes pulse {
-                    from { height: 5px; }
-                    to { height: 30px; }
-                }
-            `}</style>
+        @keyframes pulse {
+          from { height: 8px; }
+          to { height: 40px; }
+        }
+      `}</style>
     </div>
   )
 }

@@ -2,24 +2,25 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family:monospace;
 }
 
 body {
-  font-family: "Courier New", monospace;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  color: #00ff41;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  background-color: #413e3e;
+  justify-content: center;
   overflow: hidden;
   height: 100vh;
 }
 
 #root {
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Custom scrollbar for retro feel */
 ::-webkit-scrollbar {
   width: 12px;
 }
